@@ -1,8 +1,9 @@
 package jtrivium;
 
 /**
- * The class models a recursively chained FlipFlop
- * 
+ * The class models a recursively chained FlipFlop.
+ * <br>
+ * <pre>
  * Copyright (C) 2011 Daniel Ward dwa012@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +18,7 @@ package jtrivium;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * </pre>
  * 
  * @author Daniel Ward - dwa012@gmail.com
  * @date October 30, 2011
@@ -31,7 +33,7 @@ public class FlipFlop {
     /**
      * Creates a FlipFlop without neighbor on the right.
      * 
-     * @ensure this.getValue() == 0 && this.getRightNeighbor() == null
+     * @ensure this.getValue() == 0x00 && this.getRightNeighbor() == null
      */
     public FlipFlop(){
         value = 0;
@@ -43,7 +45,7 @@ public class FlipFlop {
      * Creates a new FlipFlop with the neighbor on the right.
      * 
      * @require neighbor != null
-     * @ensure this.getValue() == 0 && this.getRightNeighbor() == neighbor
+     * @ensure this.getValue() == 0x00 && this.getRightNeighbor() == neighbor
      * @param neighbor The FlipFlop that will be to the right of this FlipFlop.
      */
     public FlipFlop(FlipFlop neighbor){
@@ -56,7 +58,7 @@ public class FlipFlop {
      * Causes this FlipFlop to give its value to its right neighbor (if it has
      * a neighbor). It will then update its value with the given value.
      * 
-     * @require value != null && (value == 0b0000_0001 || value == 0b0000_0000)
+     * @require value != null && (value == 0x01 || value == 0x00)
      * @ensure this.getValue() == value && <br>
      *         this.getRightNeighbor().getValue() = old this.getValue()
      * @param value The value that this FlipFlop will now contain
@@ -84,7 +86,7 @@ public class FlipFlop {
     /**
      * Return the value contained in this FlipFlop.
      * 
-     * @ensure The value will be 0b0000_0001 || 0b0000_0000 
+     * @ensure The value will be 0x01 || 0x00 
      * @return Will return the value contained in this FlipFlop
      */
     public byte getValue() {

@@ -2,7 +2,8 @@ package jtrivium;
 
 /**
  * The interface outlines the basic structure of a shift register.
- * 
+ * <br>
+ * <pre>
  * Copyright (C) 2011 Daniel Ward dwa012@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +18,20 @@ package jtrivium;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * </pre>
  * 
  * @author Daniel Ward - dwa012@gmail.com
  * @date October 30, 2011
  * @version 0.1
  */
 public interface ShiftRegister {
+    
+    /**
+     * Will return the size, number of "bits", of this ShiftRegister.
+     * 
+     * @return The size, number of "bits", of this ShiftRegister.
+     */
+    public int size();
     
     /**
      * Get the output bit(s) of this shift register.
@@ -36,6 +45,17 @@ public interface ShiftRegister {
     public byte getOuput();
     
     /**
+     * Get a bit form the register from the given position.
+     * 
+     * @require position >= 0 && position < this.size()
+     * @ensure Will return the bit at the given position as a byte.<br>
+     *         result == 0x00 || result = 0x01
+     * @param position The position of the bit in this ShiftRegister
+     * @return The bit at the given position.
+     */
+    public byte getBitAt(int position);
+    
+    /**
      * Load a value into the register. The register loads values from the left.<br>
      * <br>
      * All implementing classes must indicate how many bits can be loaded at one time.
@@ -45,14 +65,13 @@ public interface ShiftRegister {
     public void loadValue(byte value);
     
     /**
-     * Set the tap values based on the given number of location in the register.<br>
+     * Get the bits from this ShiftRegister at the given positions.<br>
+     * The returned array will contain the the bits in the same order that<br>
+     * the positions were give.<br>
      * <br>
-     * All implementing classes must specify the number of allowed tap locations.<br>
-     * and how the locations will be used.
      * 
-     * @param tapLocations The tap locations. The implementing class will indicate<br>
-     *                     how many parameters are accepted and how they are used.
+     * @param positions The positions of the bits to be returned
      */
-    public void setTapValue(int... tapLocations); 
+    public byte[] getBits(int... positions); 
     
 }
