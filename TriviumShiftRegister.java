@@ -123,7 +123,7 @@ public class TriviumShiftRegister implements ShiftRegister {
         byte[] result = new byte[positions.length];
         
         for (int i = 0; i < result.length; i++) {
-            result[i]= flipFlops[i].getValue();            
+            result[i]= flipFlops[positions[i]].getValue();            
         }
         
         return result;
