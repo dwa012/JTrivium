@@ -25,22 +25,22 @@ package jtrivium;
  * @version 0.1
  */
 public class FlipFlop {
-    
+
     private boolean hasRightNeighbor;//used to see if this FlopFlop has a neighbor
     private FlipFlop rightNeighbor;//used to reference the right neighbor
     private byte value;//the value of this FlipFlop 
-    
+
     /**
      * Creates a FlipFlop without neighbor on the right.
      * 
      * @ensure this.getValue() == 0x00 && this.getRightNeighbor() == null
      */
-    public FlipFlop(){
+    public FlipFlop() {
         value = 0;
         hasRightNeighbor = false;
-        
+
     }
-    
+
     /**
      * Creates a new FlipFlop with the neighbor on the right.
      * 
@@ -48,12 +48,12 @@ public class FlipFlop {
      * @ensure this.getValue() == 0x00 && this.getRightNeighbor() == neighbor
      * @param neighbor The FlipFlop that will be to the right of this FlipFlop.
      */
-    public FlipFlop(FlipFlop neighbor){
+    public FlipFlop(FlipFlop neighbor) {
         value = 0;
         hasRightNeighbor = true;
         this.rightNeighbor = neighbor;
     }
-    
+
     /**
      * Causes this FlipFlop to give its value to its right neighbor (if it has
      * a neighbor). It will then update its value with the given value.
@@ -63,11 +63,12 @@ public class FlipFlop {
      *         this.getRightNeighbor().getValue() = old this.getValue()
      * @param value The value that this FlipFlop will now contain
      */
-    public void tick(byte value){
+    public void tick(byte value) {
         //if this FlipFlop has a neighbor, then cause it to tick
-        if(hasRightNeighbor)
+        if (hasRightNeighbor) {
             rightNeighbor.tick(this.value);
-        
+        }
+
         this.value = value;
     }
 
@@ -86,11 +87,10 @@ public class FlipFlop {
     /**
      * Return the value contained in this FlipFlop.
      * 
-     * @ensure The value will be 0x01 || 0x00 
+     * @ensure The return will be 0x01 || 0x00 
      * @return Will return the value contained in this FlipFlop
      */
     public byte getValue() {
         return value;
-    }   
-    
+    }
 }

@@ -27,11 +27,11 @@ package jtrivium;
  * @version 0.1
  */
 public class TriviumShiftRegister implements ShiftRegister {
-    
+
     //the array of FlipFlops used for this shift regster
     private FlipFlop[] flipFlops;
     private byte tap;//the tap of this ShiftRegister
-    
+
     /**
      * Creates a ShiftRegister with the number of "bits" given.
      * 
@@ -39,31 +39,31 @@ public class TriviumShiftRegister implements ShiftRegister {
      * @ensure this.size() = sizeOfRegister && this.getOutput() == 0x00
      * @param sizeOfRegister The number of "bits" of this ShiftRegister.
      */
-    public TriviumShiftRegister(int sizeOfRegister){
+    public TriviumShiftRegister(int sizeOfRegister) {
         flipFlops = new FlipFlop[sizeOfRegister];
-        
+
         //create the rightmost FlipFlop as a FlipFlop without a neighbor
-        flipFlops[sizeOfRegister-1] = new FlipFlop();
-        
+        flipFlops[sizeOfRegister - 1] = new FlipFlop();
+
         //create the FlipFlops for this ShiftRegister
         for (int i = flipFlops.length - 2; i >= 0; i--) {
-            flipFlops[i] = new FlipFlop(flipFlops[i+1]);            
-        }        
-        
+            flipFlops[i] = new FlipFlop(flipFlops[i + 1]);
+        }
+
         //initialize the tap
         tap = 0x00;
     }
-    
+
     /**
      * Will return the size, number of "bits", of this ShiftRegister.
      * 
      * @return The size, number of "bits", of this ShiftRegister.
      */
     @Override
-    public int size(){
+    public int size() {
         return this.flipFlops.length;
     }
-    
+
     /**
      * Get the output bit(s) of this shift register.
      * <br>
@@ -79,7 +79,7 @@ public class TriviumShiftRegister implements ShiftRegister {
     public byte getOuput() {
         return this.tap;
     }
-    
+
     /**
      * Get a bit form the register from the given position.
      * 
@@ -93,7 +93,7 @@ public class TriviumShiftRegister implements ShiftRegister {
     public byte getBitAt(int position) {
         return flipFlops[position].getValue();
     }
-    
+
     /**
      * Load a value into the register. The register loads values from the left.<br>
      * <br>
@@ -104,9 +104,9 @@ public class TriviumShiftRegister implements ShiftRegister {
      * @param value The value to be loaded into the register.
      */
     @Override
-    public void loadValue(byte value){
+    public void loadValue(byte value) {
         flipFlops[0].tick(value);
-    }    
+    }
 
     /**
      * Get the bits from this ShiftRegister at the given positions.<br>
@@ -121,11 +121,11 @@ public class TriviumShiftRegister implements ShiftRegister {
     @Override
     public byte[] getBits(int... positions) {
         byte[] result = new byte[positions.length];
-        
+
         for (int i = 0; i < result.length; i++) {
-            result[i]= flipFlops[positions[i]].getValue();            
+            result[i] = flipFlops[positions[i]].getValue();
         }
-        
+
         return result;
     }
 }

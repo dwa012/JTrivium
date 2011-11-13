@@ -25,14 +25,14 @@ package jtrivium;
  * @version 0.1
  */
 public interface ShiftRegister {
-    
+
     /**
      * Will return the size, number of "bits", of this ShiftRegister.
      * 
      * @return The size, number of "bits", of this ShiftRegister.
      */
     public int size();
-    
+
     /**
      * Get the output bit(s) of this shift register.
      * <br>
@@ -43,7 +43,7 @@ public interface ShiftRegister {
      *         by the implementing class.
      */
     public byte getOuput();
-    
+
     /**
      * Get a bit form the register from the given position.
      * 
@@ -54,7 +54,7 @@ public interface ShiftRegister {
      * @return The bit at the given position.
      */
     public byte getBitAt(int position);
-    
+
     /**
      * Load a value into the register. The register loads values from the left.<br>
      * <br>
@@ -63,7 +63,7 @@ public interface ShiftRegister {
      * @param value The value to be loaded into the register.
      */
     public void loadValue(byte value);
-    
+
     /**
      * Get the bits from this ShiftRegister at the given positions.<br>
      * The returned array will contain the the bits in the same order that<br>
@@ -72,6 +72,5 @@ public interface ShiftRegister {
      * 
      * @param positions The positions of the bits to be returned
      */
-    public byte[] getBits(int... positions); 
-    
+    public byte[] getBits(int... positions);
 }
