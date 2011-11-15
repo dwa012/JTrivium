@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jtrivium;
+package jtrivium.hardware;
 
 /**
  * The class models a ShiftRegister used by Trivium.<br>

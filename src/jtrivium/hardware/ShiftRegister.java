@@ -1,4 +1,4 @@
-package jtrivium;
+package jtrivium.hardware;
 
 /**
  * The interface outlines the basic structure of a shift register.

@@ -15,7 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jtrivium;
+package jtrivium.cipher;
+
+import jtrivium.hardware.TriviumShiftRegister;
 
 /**
  * The class models a the Trivium cipher.<br>

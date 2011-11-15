@@ -15,7 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jtrivium;
+package jtrivium.cipher;
+
+import jtrivium.utils.Utility;
 
 /**
  * Used to test the output of the JTrivium cipher.

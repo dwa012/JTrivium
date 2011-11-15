@@ -15,12 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jtrivium;
+package jtrivium.cli;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jtrivium.utils.FileEncrypt;
+import jtrivium.cipher.JTrivium;
+import jtrivium.utils.Utility;
 
 /**
  *

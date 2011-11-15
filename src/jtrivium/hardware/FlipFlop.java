@@ -1,4 +1,4 @@
-package jtrivium;
+package jtrivium.hardware;
 
 /**
  * The class models a recursively chained FlipFlop.
