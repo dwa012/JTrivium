@@ -33,25 +33,35 @@ public class CLI {
     private static final String LOAD_BIG_ENDIAN_OPTION = "-loadBE";
     private static final String LOAD_LITTLE_ENDIAN_OPTION = "-loadLE";
     
-    public static void main(String[] args){
-        
-        //the cipher instance to use
-        JTrivium cipher;
-        
-        //the class to encrypt a file
-        FileEncrypt encryptor = null;
-        
-        //array to hold the key and iv
-        byte[] iv;
-        byte[] key;
-        
-        //file paths
-        String inputFile;
-        String outputFile;
-        
-        //preload the options with the defaults
-        boolean keyAndIVBigEndian = true;
-        boolean loadBigEndian = true;
+    String[] args;
+    
+    //the cipher instance to use
+    JTrivium cipher;
+
+    //the class to encrypt a file
+    FileEncrypt encryptor = null;
+
+    //array to hold the key and iv
+    byte[] iv;
+    byte[] key;
+
+    //file paths
+    String inputFile;
+    String outputFile;
+
+    //preload the options with the defaults
+    boolean keyAndIVBigEndian;
+    boolean loadBigEndian;
+    
+    public CLI(String[] args){  
+        this.args = args;
+        keyAndIVBigEndian = true;
+        loadBigEndian = true;
+    }
+    
+    
+    
+    public void start(){
         
         //if the number of args is not right then print the help and exit
         if(args.length < 4){
@@ -59,6 +69,32 @@ public class CLI {
             exit();
         }
         
+        init();
+        
+        try {
+            encryptor = new FileEncrypt(inputFile, outputFile, cipher);
+            
+            try {
+                encryptor.encrypt();
+            } catch (IOException ex) {
+                Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            try {
+                encryptor.close();
+            } catch (IOException ex) {
+                Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+    }
+    
+    private void init(){
         //get the results of the options if any
         keyAndIVBigEndian = isBigEndian(args);
         loadBigEndian = isLoadBigEndian(args);
@@ -85,31 +121,10 @@ public class CLI {
         }
         
         cipher = new JTrivium(key, iv, loadBigEndian);
-        
-        try {
-            encryptor = new FileEncrypt(inputFile, outputFile, cipher);
-            
-            try {
-                encryptor.encrypt();
-            } catch (IOException ex) {
-                Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            try {
-                encryptor.close();
-            } catch (IOException ex) {
-                Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
     }
     
-    private static boolean isBigEndian(String[] args){
+    
+    private boolean isBigEndian(String[] args){
         boolean result = true;
         boolean found = false;
         for (int i = 0; i < args.length && !found; i++) {
@@ -126,7 +141,7 @@ public class CLI {
         return result;
     }
         
-    private static boolean isLoadBigEndian(String[] args){
+    private boolean isLoadBigEndian(String[] args){
         boolean result = true;
         boolean found = false;
         for (int i = 0; i < args.length && !found; i++) {
@@ -143,11 +158,11 @@ public class CLI {
         return result;
     }
     
-    private static void exit(){
+    private void exit(){
         System.exit(1);
     }
     
-    private static void displayHelp(){
+    private void displayHelp(){
         String help = "\n"
                 + "\n"
                 + "Help\n"

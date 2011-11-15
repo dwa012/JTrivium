@@ -93,19 +93,18 @@ public class JTrivium {
     public byte getKeyByte() {
         byte result = 0x00;
 
-        byte r = 0x00;
-        byte t = 0x00;
+        byte lowbits = 0x00;
+        byte highbits = 0x00;
 
         for (int j = 0; j < 4; j++) {
-            r |= this.getKeyBit() << j;
+            lowbits |= this.getKeyBit() << j;
         }
 
         for (int j = 0; j < 4; j++) {
-            t |= this.getKeyBit() << j;
+            highbits |= this.getKeyBit() << j;
         }
 
-        result = (byte) (t << 4 | r);
-
+        result = (byte) (highbits << 4 | lowbits);
 
         return result;
     }

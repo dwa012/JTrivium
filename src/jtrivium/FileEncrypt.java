@@ -31,6 +31,8 @@ import java.io.IOException;
  */
 public class FileEncrypt {
     
+    public static final int MAX_READ_BUFFER_SIZE = 2048;
+    
     JTrivium cipher;
     DataInputStream reader;
     DataOutputStream writer;
@@ -43,22 +45,23 @@ public class FileEncrypt {
     }
 
     public void encrypt() throws IOException {
-        int read = 0;
-        byte[] buffer = new byte[1024];
+        int readBytes = 0;
+        
+        byte[] buffer = new byte[FileEncrypt.MAX_READ_BUFFER_SIZE];
         
         do {
-            read = reader.read(buffer, 0, buffer.length);
+            readBytes = reader.read(buffer, 0, FileEncrypt.MAX_READ_BUFFER_SIZE);
             
-            for (int i = 0; i < read; i++) {
-                buffer[i] |= cipher.getKeyByte();
+            for (int i = 0; i < readBytes; i++) {
+                buffer[i] ^= cipher.getKeyByte();
             }
 
-            if (read > 0) {
-                writer.write(buffer, 0, read);
+            if (readBytes > 0) {
+                writer.write(buffer, 0, readBytes);
                 writer.flush();
             }
             
-        } while (read > 0);
+        } while (readBytes > 0);
     }
     
     public void close() throws IOException{
