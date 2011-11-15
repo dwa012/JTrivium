@@ -36,6 +36,13 @@ public class JTrivium {
     //this register conatins bits 178-288 (177-287) --> (0-110)
     private TriviumShiftRegister registerThree;
 
+    /**
+     * 
+     * @param key The key to use for the this cipher, must be 10 bytes in length
+     * @param IV The initialization vector to use for this cipher, must be 10 bytes in length
+     * @param bigEndian If true then the key and IV will be inserted in big endian byte order, 
+     *                  <br> else the key and IV will be inserted in little endian byte order
+     */
     public JTrivium(byte[] key, byte[] IV, boolean bigEndian) {
         registerOne = new TriviumShiftRegister(93);
         registerTwo = new TriviumShiftRegister(84);
@@ -47,7 +54,7 @@ public class JTrivium {
             initializeRegistersLittleEndian(key, IV);
         }
         
-        printRegisters();
+//        printRegisters();
 
         initializationRounds();
     }

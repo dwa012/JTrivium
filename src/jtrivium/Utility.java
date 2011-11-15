@@ -46,6 +46,10 @@ public class Utility {
         return result;
 
     }
+    
+    public static byte[] swapEndianness(byte[] bytes){
+       return  null; 
+    }
 
     public static String byteToHexString(byte b) {
         String result = "";

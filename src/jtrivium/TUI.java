@@ -31,6 +31,10 @@ public class TUI {
 
     public static void main(String[] args) {
 
+        //TODO create a cli version class that takes a parameter for the endianness. must also encryt a file
+        //TODO finish method to swap the byte order
+        //TODO fix methos that init the registers
+        
         String keyString = "8000 00b0 0000 0f00 0000";
         String ivString = "8000 0000 0000 0000 0000";
 
@@ -42,15 +46,17 @@ public class TUI {
         
         long start = System.currentTimeMillis();
         
-        long numberofRounds = (long) Math.pow(2, 64);
-        
-        for (long i = 0; i < numberofRounds; i++) {
+        long numberofRounds = (long) Math.pow(2, 24);
+        long i = 0;
+               
+        for (i = 0; i < numberofRounds; i++) {
             trivium.getKeyBit();
         }
         
+        
         long end = System.currentTimeMillis();
         
-        System.out.println("time in nano seconds " + (end - start));
+        System.out.println("time in mill seconds " + (end - start));
         
 //        for (int i = 0; i < 512; i++) {
 //            
