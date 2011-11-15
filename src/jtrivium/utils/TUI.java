@@ -15,8 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jtrivium.cipher;
+package jtrivium.utils;
 
+import jtrivium.cipher.JTrivium;
 import jtrivium.utils.Utility;
 
 /**
