@@ -1,12 +1,4 @@
-package jtrivium;
-
-/**
- * The class models a the Trivium cipher.<br>
- * 
- * See http://www.ecrypt.eu.org/stream/triviumpf.html <br>
- * See http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf <br>
- * <br>
- * <pre>
+/*
  * Copyright (C) 2011 Daniel Ward dwa012@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,7 +13,15 @@ package jtrivium;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * </pre>
+ */
+
+package jtrivium;
+
+/**
+ * The class models a the Trivium cipher.<br>
+ * 
+ * See http://www.ecrypt.eu.org/stream/triviumpf.html <br>
+ * See http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf <br>
  * 
  * @author Daniel Ward - dwa012@gmail.com
  * @date October 30, 2011
@@ -89,6 +89,26 @@ public class JTrivium {
 
         System.out.println(s);
     }
+     
+    public byte getKeyByte() {
+        byte result = 0x00;
+
+        byte r = 0x00;
+        byte t = 0x00;
+
+        for (int j = 0; j < 4; j++) {
+            r |= this.getKeyBit() << j;
+        }
+
+        for (int j = 0; j < 4; j++) {
+            t |= this.getKeyBit() << j;
+        }
+
+        result = (byte) (t << 4 | r);
+
+
+        return result;
+    }
 
     public byte getKeyBit() {
 
@@ -139,84 +159,6 @@ public class JTrivium {
     }
 
     private void initializeRegistersBigEndian(byte[] key, byte[] IV) {
-
-        //big endian, according to the spec
-        //init first register
-        for (int i = 0; i < key.length; i++) {
-            byte temp = 0x00;
-            for (int j = 0; j < 8; j++) {
-                temp = (byte) (key[i] >> j);
-                temp = (byte) (temp & 1);
-                registerOne.loadValue(temp);
-            }
-        }
-
-        //init second register
-        for (int i = 0; i < IV.length; i++) {
-            byte temp = 0x00;
-            for (int j = 0; j < 8; j++) {
-                temp = (byte) (IV[i] >> j);
-                temp = (byte) (temp & 1);
-                registerTwo.loadValue(temp);
-            }
-        }
-
-//        //little endian
-//        //init first register
-//        for (int i = key.length - 1; i >= 0; i--) {
-//            byte temp = 0x00;
-//            for (int j = 0; j < 8; j++) {
-//                temp = (byte) (key[i] >> j);
-//                temp = (byte) (temp & 1);
-//                registerOne.loadValue(temp);
-//            }
-//        }
-//
-//        //init second register
-//        for (int i = IV.length - 1; i >= 0; i--) {
-//            byte temp = 0x00;
-//            for (int j = 0; j < 8; j++) {
-//                temp = (byte) (IV[i] >> j);
-//                temp = (byte) (temp & 1);
-//                registerTwo.loadValue(temp);
-//            }
-//        }
-
-        //init third register
-        registerThree.loadValue((byte) 0x01);
-        registerThree.loadValue((byte) 0x01);
-        registerThree.loadValue((byte) 0x01);
-
-        for (int i = 0; i < registerThree.size() - 3; i++) {
-            registerThree.loadValue((byte) 0x00);
-        }
-
-    }
-
-    private void initializeRegistersLittleEndian(byte[] key, byte[] IV) {
-
-//        //big endian, according to the spec
-//        //init first register
-//        for (int i = 0; i < key.length ; i++) {
-//            byte temp = 0x00;
-//            for (int j = 0; j < 8; j++) {
-//                temp = (byte) (key[i] >> j);
-//                temp = (byte) (temp & 1);
-//                registerOne.loadValue(temp);
-//            }
-//        }
-//        
-//        //init second register
-//        for (int i = 0; i < IV.length; i++) {
-//            byte temp = 0x00;
-//            for (int j = 0; j < 8; j++) {
-//                temp = (byte) (IV[i] >> j);
-//                temp = (byte) (temp & 1);
-//                registerTwo.loadValue(temp);
-//            }
-//        }        
-
-        //little endian
         //init first register
         for (int i = key.length - 1; i >= 0; i--) {
             byte temp = 0x00;
@@ -236,6 +178,38 @@ public class JTrivium {
                 registerTwo.loadValue(temp);
             }
         }
+
+        //init third register
+        registerThree.loadValue((byte) 0x01);
+        registerThree.loadValue((byte) 0x01);
+        registerThree.loadValue((byte) 0x01);
+
+        for (int i = 0; i < registerThree.size() - 3; i++) {
+            registerThree.loadValue((byte) 0x00);
+        }
+
+    }
+
+    private void initializeRegistersLittleEndian(byte[] key, byte[] IV) {
+        //init first register
+        for (int i = 0; i < key.length ; i++) {
+            byte temp = 0x00;
+            for (int j = 0; j < 8; j++) {
+                temp = (byte) (key[i] >> j);
+                temp = (byte) (temp & 1);
+                registerOne.loadValue(temp);
+            }
+        }
+        
+        //init second register
+        for (int i = 0; i < IV.length; i++) {
+            byte temp = 0x00;
+            for (int j = 0; j < 8; j++) {
+                temp = (byte) (IV[i] >> j);
+                temp = (byte) (temp & 1);
+                registerTwo.loadValue(temp);
+            }
+        }      
 
         //init third register
         registerThree.loadValue((byte) 0x01);

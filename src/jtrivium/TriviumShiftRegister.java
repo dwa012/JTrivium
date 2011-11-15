@@ -1,11 +1,4 @@
-package jtrivium;
-
-/**
- * The class models a ShiftRegister used by Trivium.<br>
- * See http://www.ecrypt.eu.org/stream/triviumpf.html <br>
- * See http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf <br>
- * <br>
- * <pre>
+/*
  * Copyright (C) 2011 Daniel Ward dwa012@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +13,14 @@ package jtrivium;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * </pre>
+ */
+
+package jtrivium;
+
+/**
+ * The class models a ShiftRegister used by Trivium.<br>
+ * See http://www.ecrypt.eu.org/stream/triviumpf.html <br>
+ * See http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf <br>
  * 
  * @author Daniel Ward - dwa012@gmail.com
  * @date October 30, 2011

@@ -1,8 +1,26 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2011 Daniel Ward dwa012@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package jtrivium;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -10,10 +28,8 @@ package jtrivium;
  */
 public class CLI {
     
-    private static final String KEY_BIG_ENDIAN_OPTION = "-kbe";
-    private static final String KEY_LITTLE_ENDIAN_OPTION = "-kle";
-    private static final String IV_BIG_ENDIAN_OPTION = "-ibe";
-    private static final String IV_LITTLE_ENDIAN_OPTION = "-ibe";
+    private static final String BIG_ENDIAN_OPTION = "-be";
+    private static final String LITTLE_ENDIAN_OPTION = "-le";
     private static final String LOAD_BIG_ENDIAN_OPTION = "-loadBE";
     private static final String LOAD_LITTLE_ENDIAN_OPTION = "-loadLE";
     
@@ -22,13 +38,19 @@ public class CLI {
         //the cipher instance to use
         JTrivium cipher;
         
+        //the class to encrypt a file
+        FileEncrypt encryptor = null;
+        
         //array to hold the key and iv
         byte[] iv;
         byte[] key;
         
+        //file paths
+        String inputFile;
+        String outputFile;
+        
         //preload the options with the defaults
-        boolean keyBigEndian = true;
-        boolean ivBigEndian = true;
+        boolean keyAndIVBigEndian = true;
         boolean loadBigEndian = true;
         
         //if the number of args is not right then print the help and exit
@@ -38,31 +60,64 @@ public class CLI {
         }
         
         //get the results of the options if any
-        keyBigEndian = isKeyBigEndian(args);
-        ivBigEndian = isIVBigEndian(args);
+        keyAndIVBigEndian = isBigEndian(args);
         loadBigEndian = isLoadBigEndian(args);
         
+        //setup file paths
+        inputFile = args[args.length-2];
+        outputFile = args[args.length-1];
+        
+        //get the key and iv into byte form
         key = Utility.stringToHex(args[args.length-4]);
         iv = Utility.stringToHex(args[args.length-3]);
         
-        if(!keyBigEndian)
+        //if key is little endian and load in big endian, then
+        //swap endianness and 
+        if(!keyAndIVBigEndian && loadBigEndian){
             key = Utility.swapEndianness(key);
+            iv = Utility.swapEndianness(iv);
+        }
         
-        if(!ivBigEndian)
-            iv.U
+        //if key is big endian and load in little endian
+        if(keyAndIVBigEndian && !loadBigEndian){
+            key = Utility.swapEndianness(key);
+            iv = Utility.swapEndianness(iv);
+        }
+        
+        cipher = new JTrivium(key, iv, loadBigEndian);
+        
+        try {
+            encryptor = new FileEncrypt(inputFile, outputFile, cipher);
+            
+            try {
+                encryptor.encrypt();
+            } catch (IOException ex) {
+                Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            try {
+                encryptor.close();
+            } catch (IOException ex) {
+                Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         
     }
     
-    private static boolean isKeyBigEndian(String[] args){
+    private static boolean isBigEndian(String[] args){
         boolean result = true;
         boolean found = false;
         for (int i = 0; i < args.length && !found; i++) {
-            if(args[i].equals(CLI.KEY_BIG_ENDIAN_OPTION)){
+            if(args[i].equals(CLI.BIG_ENDIAN_OPTION)){
                 found = true;
                 result = true;
             }
-            else if(args[i].equals(CLI.KEY_LITTLE_ENDIAN_OPTION)){
+            else if(args[i].equals(CLI.LITTLE_ENDIAN_OPTION)){
                 found = true;
                 result = false;
             }
@@ -70,24 +125,7 @@ public class CLI {
         }
         return result;
     }
-    
-    private static boolean isIVBigEndian(String[] args){
-        boolean result = true;
-        boolean found = false;
-        for (int i = 0; i < args.length && !found; i++) {
-            if(args[i].equals(CLI.IV_BIG_ENDIAN_OPTION)){
-                found = true;
-                result = true;
-            }
-            else if(args[i].equals(CLI.IV_LITTLE_ENDIAN_OPTION)){
-                found = true;
-                result = false;
-            }
-
-        }
-        return result;
-    }
-    
+        
     private static boolean isLoadBigEndian(String[] args){
         boolean result = true;
         boolean found = false;
@@ -114,7 +152,7 @@ public class CLI {
                 + "\n"
                 + "Help\n"
                 + "\n"
-                + "JTrivium [key options] [iv options] [load options] key iv inputFile outputFile\n"
+                + "JTrivium [key and IV options] [load options] key iv inputFile outputFile\n"
                 + "\n"
                 + "key  - must be 80 bits in length. The key should be represented in hexadecimal\n"
                 + "iv   - must be 80 bits in length. The ley should be represented in hexadecimal\n"
@@ -123,19 +161,12 @@ public class CLI {
                 + "\n"
                 + "Options\n"
                 + "\n"
-                + "     Key options, only one option allowed\n"
-                + "     "+CLI.KEY_BIG_ENDIAN_OPTION+"\n"
-                + "         The key is given in big endian byte order\n"
+                + "     Key and IV options, only one option allowed\n"
+                + "     "+CLI.BIG_ENDIAN_OPTION+"\n"
+                + "         The key & IV is given in big endian byte order\n"
                 + "         This is the default option\n"
-                + "     "+CLI.KEY_LITTLE_ENDIAN_OPTION+"\n"
+                + "     "+CLI.LITTLE_ENDIAN_OPTION+"\n"
                 + "         The key is given in little endian byte order\n"
-                + "\n"
-                + "     IV options, only one option allowed\n"
-                + "     "+CLI.IV_BIG_ENDIAN_OPTION+"\n"
-                + "         The iv is given in big endian order\n"
-                + "         This is the default\n"
-                + "     "+CLI.IV_LITTLE_ENDIAN_OPTION+"\n"
-                + "         The iv is given in little endian order\n"
                 + "\n"
                 + "     Load options. How the key and iv are loaded into the cipher\n"
                 + "     only one options allowed\n"
