@@ -1,7 +1,7 @@
 package jtrivium;
 
-import jtrivium.FlipFlop;
-import jtrivium.FlipFlop;
+import jtrivium.hardware.FlipFlop;
+import jtrivium.hardware.FlipFlop;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

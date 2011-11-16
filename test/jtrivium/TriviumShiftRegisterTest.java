@@ -4,6 +4,7 @@
  */
 package jtrivium;
 
+import jtrivium.hardware.TriviumShiftRegister;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
