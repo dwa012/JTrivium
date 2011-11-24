@@ -55,41 +55,8 @@ public class JTrivium {
         } else {
             initializeRegistersLittleEndian(key, IV);
         }
-        
-//        printRegisters();
 
         initializationRounds();
-    }
-    
-     private void printRegisters() {
-        String s = "";
-        for (int i = 0; i < registerOne.size(); i++) {
-
-            s += registerOne.getBitAt(i);
-
-        }
-
-        System.out.println(s);
-
-        s = "";
-
-        for (int i = 0; i < registerTwo.size(); i++) {
-
-            s += registerTwo.getBitAt(i);
-
-        }
-
-        System.out.println(s);
-
-        s = "";
-
-        for (int i = 0; i < registerThree.size(); i++) {
-
-            s += registerThree.getBitAt(i);
-
-        }
-
-        System.out.println(s);
     }
      
     public byte getKeyByte() {
